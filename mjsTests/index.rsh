@@ -2,7 +2,7 @@
 
 export const startup = Reach.App(() => {
   const Event = Participant('Organiser', {
-    // eventName: Bytes(128),
+    eventName: Bytes(128),
     ticketPrice: UInt,
     eventEnd: UInt,
     ready: Fun([], Null)
@@ -19,12 +19,12 @@ export const startup = Reach.App(() => {
   init()
 
   Event.only(() => {
-    // const eventName = declassify(interact.eventName)
+    const eventName = declassify(interact.eventName)
     const ticketPrice = declassify(interact.ticketPrice)
     const eventEnd = declassify(interact.eventEnd)
   })
 
-  Event.publish(ticketPrice, eventEnd)
+  Event.publish(eventName, ticketPrice, eventEnd)
   Event.interact.ready()
 
   const RSVPs = new Map(
@@ -61,7 +61,7 @@ export const startup = Reach.App(() => {
       }
     )
     .api(
-      ConfirmAttendance.guestAttended,
+      ConfirmAttendance.guestAttended, // API call to handle checkin
       who => {
         //Check that 'who' actually RSVP'd
         check(isSome(RSVPs[who]), 'RSVP match found')

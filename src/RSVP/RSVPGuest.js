@@ -1,5 +1,5 @@
 import React from 'react'
-import * as backend from '../build/index.startup.mjs'
+import * as backend from '../../build/index.startup.mjs'
 import { stdlib } from '../App'
 
 export class RSVPGuest extends React.Component {

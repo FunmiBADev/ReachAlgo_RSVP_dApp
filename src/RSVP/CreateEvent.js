@@ -1,9 +1,9 @@
 import React from 'react'
-import * as backend from '../build/index.startup.mjs'
+import * as backend from '../../build/index.startup.mjs'
 import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib'
 import { loadStdlib } from '@reach-sh/stdlib'
 
-// import { stdlib, defaultPrice, defaultDeadline } from '../App'
+// import { stdlib, defaultPrice, defaultDeadline } from '../App test'
 
 export const stdlib = loadStdlib(process.env)
 stdlib.setWalletFallback(
@@ -15,6 +15,7 @@ stdlib.setWalletFallback(
 const { standardUnit } = stdlib
 export const defaultPrice = '20'
 export const defaultDeadline = '50'
+
 export class CreateEvent extends React.Component {
   constructor (props) {
     super(props)

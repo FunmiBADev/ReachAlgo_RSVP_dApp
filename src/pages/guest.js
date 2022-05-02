@@ -1,20 +1,21 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
 import { DisplayPageDiv } from '../components/Common/DisplayPageWrapper'
+import LoadingButton from '../components/Common/LoadingButton'
 import { PageBreak } from '../components/Common/PageBreak'
-import { PageHeader } from '../components/Common/PageHeader'
-import { CreateEvent } from '../RSVP/CreateEvent'
+import RSVPForm from '../forms/RSVPForm'
 
-const Create = () => {
+const Guest = () => {
   return (
     <Container>
       <DisplayPageDiv>
-        <PageHeader addDescription='Manage Event Page' />
+        <LoadingButton addMessage='Please wait while event RSVP is confirmed' />
         <PageBreak />
-        <CreateEvent />
+        <RSVPForm />
+        <PageBreak />
       </DisplayPageDiv>
     </Container>
   )
 }
 
-export default Create
+export default Guest

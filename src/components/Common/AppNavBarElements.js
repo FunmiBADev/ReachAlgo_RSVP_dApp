@@ -23,6 +23,18 @@ export const NavLink = styled(Link)`
     color: #15cdfc;
   }
 `
+export const NavLinkHeader = styled(Link)`
+  color: #fff;
+  display: flex;
+  align-items: flex-start;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+  &.active {
+    color: #15cdfc;
+  }
+`
 
 export const Bars = styled(FaBars)`
   display: none;
