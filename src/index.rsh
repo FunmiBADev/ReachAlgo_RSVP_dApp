@@ -3,6 +3,7 @@
 export const startup = Reach.App(() => {
   const Event = Participant('Organiser', {
     eventName: Bytes(128),
+    eventDetails: Bytes(250),
     ticketPrice: UInt,
     eventEnd: UInt,
     ready: Fun([], Null)
@@ -20,11 +21,12 @@ export const startup = Reach.App(() => {
 
   Event.only(() => {
     const eventName = declassify(interact.eventName)
+    const eventDetails = declassify(interact.eventDetails)
     const ticketPrice = declassify(interact.ticketPrice)
     const eventEnd = declassify(interact.eventEnd)
   })
 
-  Event.publish(eventName, ticketPrice, eventEnd)
+  Event.publish(eventName, eventDetails, ticketPrice, eventEnd)
   Event.interact.ready()
 
   const RSVPs = new Map(

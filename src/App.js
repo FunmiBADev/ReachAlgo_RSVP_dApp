@@ -2,11 +2,11 @@ import React from 'react'
 import './App.css'
 import AppNavBar from './components/Navbar/AppNavBar'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages'
 import CloseEvent from './pages/close'
 import Guest from './pages/guest'
 import Create from './pages/create'
 import Checkin from './pages/checkin'
+import WalletConnect from './pages/wallet'
 
 const App = () => {
   return (
@@ -14,7 +14,8 @@ const App = () => {
       <Router>
         <AppNavBar />
         <Routes>
-          <Route path='/' exact element={<Create />} />
+          <Route path='/' exact element={<WalletConnect />} />
+          <Route path='/create' element={<Create />} />
           <Route path='/checkin' element={<Checkin />} />
           <Route path='/guest' element={<Guest />} />
           <Route path='/close' element={<CloseEvent />} />

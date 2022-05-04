@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 
-const initialState = {
-  contractInfo: ''
-}
 const RSVPForm = props => {
-  const [rsvpData, setRsvpData] = useState(initialState)
+  const [rsvpData, setRsvpData] = useState('')
+  const [rsvpsData, setRsvpsData] = useState([])
 
   const handleSubmit = e => {
     e.preventDefault()
-    props.onSubmit({
+    const newRsvpRequest = {
       contractInfo: rsvpData.contractInfo
-    })
+    }
+
+    setRsvpsData([...rsvpsData].concat(newRsvpRequest))
+    console.log(rsvpsData)
     setRsvpData('')
   }
 

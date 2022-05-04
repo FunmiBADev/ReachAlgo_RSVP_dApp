@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 
-const initialState = {
-  contractInfo: ''
-}
-
-const CloseForm = props => {
-  const [closeEventData, setCloseEventData] = useState(initialState)
+const CloseForm = () => {
+  const [closeEventData, setCloseEventData] = useState('')
+  const [closeEventsData, setCloseEventsData] = useState([])
 
   const handleSubmit = e => {
     e.preventDefault()
-    props.onSubmit({
+    const newCloseRequest = {
       contractInfo: closeEventData.contractInfo
-    })
+    }
+    setCloseEventsData([...closeEventsData].concat(newCloseRequest))
+    console.log(closeEventsData)
     setCloseEventData('')
   }
 

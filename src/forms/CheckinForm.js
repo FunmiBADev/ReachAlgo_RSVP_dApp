@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 
-const initialState = {
-  contractInfo: '',
-  rsvpAddress: ''
-}
-const CheckinForm = props => {
-  const [checkinData, setCheckinData] = useState(initialState)
+const CheckinForm = () => {
+  const [checkinData, setCheckinData] = useState('')
+  const [checkinsData, setCheckinsData] = useState([])
 
   const handleSubmit = e => {
     e.preventDefault()
-    props.onSubmit({
+    const newCheckinRequest = {
       contractInfo: checkinData.contractInfo,
       rsvpAddress: checkinData.rsvpAddress
-    })
+    }
+
+    setCheckinsData([...checkinsData].concat(newCheckinRequest))
+    console.log(checkinsData)
     setCheckinData('')
   }
 
