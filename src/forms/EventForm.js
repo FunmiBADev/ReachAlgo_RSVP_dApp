@@ -1,23 +1,56 @@
 import { nanoid } from 'nanoid'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
+import * as backend from '../build/index.startup.mjs'
+import { stdlib } from '../utitlity/utils'
 
-const EventForm = () => {
+const EventForm = ({ account }) => {
   const [eventData, setEventData] = useState('')
-  const [eventsData, setEventsData] = useState([])
+  const [contractDeploying, setContractDeploying] = useState(false)
+
+  const Views = {
+    isLoading: 'is loading',
+    createEvent: 'create event',
+    eventContractDeployed: 'event contract deployed'
+  }
+  const [view, setView] = useState(Views.createEvent)
+
+  const deployEvent = async (eName, eeventDetails, tPrice, deadline) => {
+    const contractCall = await account.contract(backend)
+    setContractDeploying(true)
+    setView(Views.isLoading)
+    console.log(account)
+    console.log({ eName, eeventDetails, tPrice, deadline })
+    try {
+      await contractCall.p.Organiser({
+        eventName: '',
+        eventDetails: '',
+        ticketPrice: stdlib.parseCurrency(tPrice),
+        eventEnd: stdlib.bigNumberify(deadline),
+        ready: () => {
+          throw 42
+        }
+      })
+    } catch (err) {
+      if (err !== 42) {
+        throw err
+      }
+    }
+    const ctcInfoStr = JSON.stringify(await contractCall.getInfo(), null, 2)
+    setView(Views.eventContractDeployed)
+    console.log(ctcInfoStr)
+  }
 
   const handleSubmit = e => {
     e.preventDefault()
-    const newEvent = {
-      id: nanoid(),
-      eventName: eventData.eventName,
-      eventDetails: eventData.eventDetails,
-      ticketPrice: eventData.ticketPrice,
-      eventEnd: eventData.eventEnd
-    }
-
-    setEventsData([...eventsData].concat(newEvent))
-    console.log(eventsData)
+    setContractDeploying(true)
+    deployEvent(
+      eventData.eventName,
+      eventData.eventDetails,
+      eventData.ticketPrice,
+      eventData.eventEnd
+    )
+    setContractDeploying(false)
     setEventData('')
   }
 
@@ -34,8 +67,10 @@ const EventForm = () => {
 
   return (
     <>
-      {' '}
-      <Form onSubmit={handleSubmit} className='event-app'>
+      <Form
+        onSubmit={!contractDeploying ? handleSubmit : null}
+        className='event-app'
+      >
         <Row>
           <Col>
             <Form.Label>Event Name</Form.Label>
@@ -105,8 +140,12 @@ const EventForm = () => {
             <Button variant='secondary' type='reset'>
               Clear Form
             </Button>
-            <Button variant='primary' type='submit'>
-              Deploy
+            <Button
+              variant='primary'
+              disabled={contractDeploying}
+              type='submit'
+            >
+              {contractDeploying ? 'Deploying...' : 'Deploy'}
             </Button>
           </div>
         </Row>

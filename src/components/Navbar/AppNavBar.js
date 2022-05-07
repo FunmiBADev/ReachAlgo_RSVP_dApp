@@ -1,5 +1,12 @@
 import React from 'react'
-import { Nav, NavLink, NavMenu } from '../Common/AppNavBarElements'
+import {
+  Nav,
+  NavBtn,
+  NavBtnLinkSuccess,
+  NavLink,
+  NavMenu
+} from '../Common/AppNavBarElements'
+import MyAlgoWallet from '../MyAlgoWallet/MyAlgoWallet'
 
 const AppNavbar = () => {
   return (
