@@ -6,8 +6,9 @@ const stdlib = loadStdlib()
 const startingBalance = stdlib.parseCurrency(750)
 const EventCreatorAccount = await stdlib.newTestAccount(startingBalance)
 
-const eventEnd = 200
+const eventEnd = 30
 const eventName = 'Algo-Reach Hackathon'
+const eventDetails = 'More information about the event'
 
 const eventContractCall = EventCreatorAccount.contract(backend)
 
@@ -16,6 +17,7 @@ const eventContractCall = EventCreatorAccount.contract(backend)
 try {
   await eventContractCall.p.Organiser({
     eventName,
+    eventDetails,
     ticketPrice: stdlib.parseCurrency(75),
     eventEnd,
     ready: () => {

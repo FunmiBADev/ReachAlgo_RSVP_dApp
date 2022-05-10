@@ -1,21 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { DisplayPageDiv } from '../components/Common/DisplayPageWrapper'
-import LoadingButton from '../components/Common/LoadingButton'
 import { PageBreak } from '../components/Common/PageBreak'
-import { PageHeader } from '../components/Common/PageHeader'
 import MyAlgoWallet from '../components/MyAlgoWallet/MyAlgoWallet'
-import RSVPForm from '../forms/RSVPForm'
+
+import { RSVPView } from '../forms/RSVPView'
 
 const Guest = () => {
+  const [account, setAccount] = useState({})
+
+  const getAccountDetails = acc => {
+    setAccount(acc)
+  }
   return (
     <Container>
       <DisplayPageDiv>
-        <MyAlgoWallet />
+        <MyAlgoWallet setAccount={getAccountDetails} />
         <PageBreak />
-        <LoadingButton addMessage='Please wait while your event RSVP is confirmed' />
-        <PageBreak />
-        <RSVPForm />
+        <RSVPView acc={account} />
         <PageBreak />
       </DisplayPageDiv>
     </Container>

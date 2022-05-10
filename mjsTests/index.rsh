@@ -80,10 +80,16 @@ export const startup = Reach.App(() => {
         return [isContinue, ticketsBooked - 1] // remove from guest list so money can be returned
       }
     )
-    .timeout(eventEnd, () => {
+    // .timeout(eventEnd, () => {
+    //   const [[], c] = call(ConfirmAttendance.eventExpire)
+    //   c(true) // successful API call
+    //   commit()
+    //   Event.publish()
+    //   return [false, ticketsBooked]
+    // })
+    .timeout(absoluteTime(eventEnd), () => {
       const [[], c] = call(ConfirmAttendance.eventExpire)
       c(true) // successful API call
-      // Event.publish()
       return [false, ticketsBooked]
     })
 
@@ -92,7 +98,3 @@ export const startup = Reach.App(() => {
   commit()
   exit()
 })
-// .timeout(deadline, () => {
-//   Auctioneer.publish()
-//   return [currentPot, false, winnerAddress]
-// })
