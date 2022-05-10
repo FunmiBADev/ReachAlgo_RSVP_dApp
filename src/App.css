@@ -30,6 +30,22 @@
 .event-input::placeholder {
   color: #e2e2e2;
 }
+
+textarea {
+  font-size: calc(10px + 2vmin);
+}
+
+.ContractInfo {
+  font-size: calc(10px + 1vmin);
+  text-align: left;
+  width: 90vw;
+  min-height: 600px;
+  padding-bottom: 32px;
+  height: 22em;
+  padding: 2vw;
+  overflow-x: scroll;
+  white-space: pre;
+}
 /* body {
   background: linear-gradient(
     90deg,
