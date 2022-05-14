@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Container } from 'react-bootstrap'
+import ConnectWalletAlert from '../components/Common/ConnectWalletAlert'
 import { DisplayPageDiv } from '../components/Common/DisplayPageWrapper'
 import { PageBreak } from '../components/Common/PageBreak'
 import MyAlgoWallet from '../components/MyAlgoWallet/MyAlgoWallet'
-import { CheckinView } from '../forms/CheckinView'
+import { CheckinView } from '../viewsMode/CheckinView'
 
 const Checkin = () => {
   const [account, setAccount] = useState({})
@@ -14,9 +15,9 @@ const Checkin = () => {
   return (
     <Container>
       <DisplayPageDiv>
-        <MyAlgoWallet setAccount={getAccountDetails} />
+        <ConnectWalletAlert />
         <PageBreak />
-
+        <MyAlgoWallet setAccount={getAccountDetails} />
         <PageBreak />
         <CheckinView acc={account} />
         <PageBreak />

@@ -3,7 +3,7 @@ import ConnectButton from '.'
 import { BodyText } from '../MyAlgoWallet.styles'
 import { Col, Row } from 'react-bootstrap'
 
-const ConnectWalletButton = ({ connectWallet, accountAddress }) => {
+const ConnectWalletButton = ({ connectWallet, accountAddress, accountBal }) => {
   return (
     <>
       <div>
@@ -14,6 +14,9 @@ const ConnectWalletButton = ({ connectWallet, accountAddress }) => {
           <div>
             <Col>
               <BodyText>Account Address: {accountAddress} </BodyText>
+            </Col>
+            <Col>
+              <BodyText>Account Balance: {accountBal} ALGOS</BodyText>
             </Col>
           </div>
         </Row>

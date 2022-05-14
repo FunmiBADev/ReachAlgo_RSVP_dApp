@@ -9,6 +9,10 @@ export const startup = Reach.App(() => {
     ready: Fun([], Null)
   })
 
+  const AcceptTerms = Participant('Terms', {
+    acceptFee: Fun([UInt], Null)
+  })
+
   const Guest = API('Guest', {
     willAttend: Fun([], Bool)
   })
@@ -28,6 +32,10 @@ export const startup = Reach.App(() => {
 
   Event.publish(eventName, eventDetails, ticketPrice, eventEnd)
   Event.interact.ready()
+
+  AcceptTerms.only(() => {
+    interact.acceptFee(ticketPrice)
+  })
 
   const RSVPs = new Map(
     Object({
@@ -66,13 +74,13 @@ export const startup = Reach.App(() => {
       ConfirmAttendance.guestAttended, // API call to handle checkin
       who => {
         //Check that 'who' actually RSVP'd
-        check(isSome(RSVPs[who]), 'RSVP match found')
+        check(isSome(RSVPs[who]), 'Guest Checkin match found')
         //Ensures that the 'who' calling the checkin api is the Event Deployer Only
         check(this == Event, 'Event Organiser here')
       },
       _ => 0, // No payment required during check in.
       (who, c) => {
-        check(isSome(RSVPs[who]), 'RSVP match found')
+        check(isSome(RSVPs[who]), 'Guest Checkin match found')
         check(this == Event, 'Event Organiser here')
         transfer(ticketPrice).to(who)
         delete RSVPs[who]
@@ -92,7 +100,3 @@ export const startup = Reach.App(() => {
   commit()
   exit()
 })
-// .timeout(deadline, () => {
-//   Auctioneer.publish()
-//   return [currentPot, false, winnerAddress]
-// })

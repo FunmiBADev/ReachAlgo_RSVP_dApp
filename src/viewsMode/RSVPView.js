@@ -1,10 +1,13 @@
 import React from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap'
 import * as backend from '../build/index.startup.mjs'
 import SuccessConfirmation from '../components/Common/SuccessConfirmation.js'
 import LoadingButton from '../components/Common/LoadingButton.js'
-import { BodyTextB } from '../components/MyAlgoWallet/MyAlgoWallet.styles.js'
-import { stdlib } from '../utitlity/utils'
+import {
+  BodyText,
+  BodyTextB
+} from '../components/MyAlgoWallet/MyAlgoWallet.styles.js'
+import { stdlib, timer } from '../utitlity/utils'
 
 export class RSVPView extends React.Component {
   constructor (props) {
@@ -16,8 +19,20 @@ export class RSVPView extends React.Component {
     const contractCall = this.props.acc.contract(backend, ctcInfo)
     this.setState({ mode: 'Wait', ctc: contractCall })
     await contractCall.apis.Guest.willAttend()
-    this.setState({ mode: 'Done' })
+    this.setState({ mode: 'RSVPd' })
   }
+
+  async copyToClipboard (button) {
+    const { acc } = this.props
+    navigator.clipboard.writeText(stdlib.formatAddress(acc))
+    const origInnerHTML = button.innerHTML
+    button.innerHTML = 'Copied'
+    button.disabled = true
+    await timer(1000)
+    button.innerHTML = origInnerHTML
+    button.disabled = false
+  }
+
   render () {
     let organise = null
     const parent = this
@@ -63,21 +78,6 @@ export class RSVPView extends React.Component {
               </div>
             </Row>
           </Form>
-          What is the event info?
-          <br />
-          <textarea
-            className='ContractInfo'
-            spellCheck='false'
-            onChange={e => this.setState({ ctcInfoStr: e.currentTarget.value })}
-            placeholder='{}'
-          />
-          <br />
-          <button
-            disabled={!ctcInfoStr}
-            onClick={() => parent.eventRSVP(ctcInfoStr)}
-          >
-            RSVP
-          </button>
         </div>
       )
     } else if (mode === 'Wait') {
@@ -87,20 +87,27 @@ export class RSVPView extends React.Component {
         </div>
       )
     } else {
-      // 'Done'
+      // 'RSVPd'
       const { acc } = this.props
       organise = (
         <div>
           <Row>
             <Col>
-              <SuccessConfirmation addMessage=' Your RSVP was succefully confirmed, Your Address is:' />
+              <Alert variant='info'>
+                <SuccessConfirmation addMessage=' Your RSVP was succefully confirmed, Your Address is:' />
+              </Alert>
             </Col>
           </Row>
-          <Col>
-            <BodyTextB className='ContractInfo'>
-              {stdlib.formatAddress(acc)}
-            </BodyTextB>
-          </Col>
+          <div className='event-app'>
+            <Col>
+              <BodyText className='event-input'>
+                {stdlib.formatAddress(acc)}
+              </BodyText>
+              <Button onClick={e => this.copyToClipboard(e.currentTarget)}>
+                <BodyTextB>Copy to clipboard</BodyTextB>
+              </Button>
+            </Col>
+          </div>
         </div>
       )
     }
