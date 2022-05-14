@@ -10,6 +10,7 @@ export const startup = Reach.App(() => {
   })
 
   const Guest = API('Guest', {
+    // confirmPurchase: Fun([UInt], Bool),
     willAttend: Fun([], Bool)
   })
 
@@ -66,13 +67,13 @@ export const startup = Reach.App(() => {
       ConfirmAttendance.guestAttended, // API call to handle checkin
       who => {
         //Check that 'who' actually RSVP'd
-        check(isSome(RSVPs[who]), 'RSVP match found')
+        check(isSome(RSVPs[who]), 'Guest already Checked in')
         //Ensures that the 'who' calling the checkin api is the Event Deployer Only
         check(this == Event, 'Event Organiser here')
       },
       _ => 0, // No payment required during check in.
       (who, c) => {
-        check(isSome(RSVPs[who]), 'RSVP match found')
+        check(isSome(RSVPs[who]), 'Guest already Checked in')
         check(this == Event, 'Event Organiser here')
         transfer(ticketPrice).to(who)
         delete RSVPs[who]
@@ -80,13 +81,6 @@ export const startup = Reach.App(() => {
         return [isContinue, ticketsBooked - 1] // remove from guest list so money can be returned
       }
     )
-    // .timeout(eventEnd, () => {
-    //   const [[], c] = call(ConfirmAttendance.eventExpire)
-    //   c(true) // successful API call
-    //   commit()
-    //   Event.publish()
-    //   return [false, ticketsBooked]
-    // })
     .timeout(absoluteTime(eventEnd), () => {
       const [[], c] = call(ConfirmAttendance.eventExpire)
       c(true) // successful API call

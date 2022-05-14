@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Container } from 'react-bootstrap'
+import ConnectWalletAlert from '../components/Common/ConnectWalletAlert'
 import { DisplayPageDiv } from '../components/Common/DisplayPageWrapper'
 import { PageBreak } from '../components/Common/PageBreak'
 import MyAlgoWallet from '../components/MyAlgoWallet/MyAlgoWallet'
-import { CloseView } from '../forms/CloseView'
+import { CloseView } from '../viewsMode/CloseView'
 
 const CloseEvent = () => {
   const [account, setAccount] = useState({})
@@ -14,6 +15,8 @@ const CloseEvent = () => {
   return (
     <Container>
       <DisplayPageDiv>
+        <ConnectWalletAlert />
+        <PageBreak />
         <MyAlgoWallet setAccount={getAccountDetails} />
         <PageBreak />
         <CloseView acc={account} />

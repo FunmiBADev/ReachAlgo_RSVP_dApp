@@ -17,6 +17,9 @@ stdlib.setWalletFallback(
   })
 )
 
+export const timer = milliseconds =>
+  new Promise(resolve => setTimeout(resolve, milliseconds))
+
 export const defaultEventName = 'Enter Event Name'
 export const defaultEventDescription = 'Enter Event Description'
 export const defaultPrice = '5'

@@ -1,38 +1,42 @@
 import React from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap'
 import * as backend from '../build/index.startup.mjs'
 import LoadingButton from '../components/Common/LoadingButton.js'
 import { BodyTextB } from '../components/MyAlgoWallet/MyAlgoWallet.styles.js'
 
-export class CloseView extends React.Component {
+export class CheckinView extends React.Component {
   constructor (props) {
     super(props)
     this.setState({ mode: 'EnterInfo', acc: {} })
   }
-  async doClose (ctcInfoStr) {
+  async eventCheckin (ctcInfoStr, guest) {
     const ctcInfo = JSON.parse(ctcInfoStr)
-    const ctc = this.props.acc.contract(backend, ctcInfo)
-    this.setState({ mode: 'Wait', ctc })
-    await ctc.apis.Attendance.eventExpire()
+    const contractCall = this.props.acc.contract(backend, ctcInfo)
+    this.setState({ mode: 'Wait', contractCall, guest })
+    await contractCall.apis.Attendance.guestAttended(guest)
     this.setState({ mode: 'Done' })
+    console.log(guest, ctcInfo)
   }
+
   render () {
     let organise = null
     const parent = this
     const mode = this.state?.mode || 'EnterInfo'
     if (mode === 'EnterInfo') {
       const ctcInfoStr = this.state?.ctcInfoStr || ''
+      const guest = this.state?.guest || ''
       organise = (
         <div>
           <Form
-            onSubmit={() => parent.doClose(ctcInfoStr)}
             className='event-app'
+            onSubmit={() => parent.eventCheckin(ctcInfoStr, guest)}
           >
             <Row>
               <Col>
                 <Form.Label>Provide Contract Information</Form.Label>
                 <Form.Control
                   autoComplete='off'
+                  spellCheck='false'
                   size='lg'
                   required
                   as='textarea'
@@ -47,14 +51,35 @@ export class CloseView extends React.Component {
                 />
               </Col>
             </Row>
+            <Row>
+              <Col>
+                <Form.Label>Checkin Address</Form.Label>
+                <Form.Control
+                  autoComplete='off'
+                  size='lg'
+                  spellCheck='false'
+                  required
+                  as='textarea'
+                  name='rsvpAddress'
+                  type='text'
+                  placeholder='Please enter your RSVP wallet address'
+                  className='event-input'
+                  onChange={e =>
+                    this.setState({
+                      guest: e.currentTarget.value
+                    })
+                  }
+                />
+              </Col>
+            </Row>
 
             <Row>
               <div className='modal-footer' style={{ marginRight: '4px' }}>
                 <Button variant='secondary' type='reset'>
                   Clear Form
                 </Button>
-                <Button variant='primary' type='submit' disabled={!ctcInfoStr}>
-                  Close Event
+                <Button variant='primary' type='submit'>
+                  Checkin
                 </Button>
               </div>
             </Row>
@@ -64,17 +89,23 @@ export class CloseView extends React.Component {
     } else if (mode === 'Wait') {
       organise = (
         <div>
-          <LoadingButton addMessage='Please wait while your event contract is terminated' />
+          <LoadingButton addMessage='Please wait while your event checkin is completed' />
         </div>
       )
     } else {
       // 'Done'
+      const guest = this.state?.guest || ''
       organise = (
         <div>
-          <BodyTextB>Event Close Complete</BodyTextB>
+          <Col>
+            <Alert>
+              <BodyTextB> Done! You have checked in: {guest}.</BodyTextB>
+            </Alert>
+          </Col>
+          <br />
         </div>
       )
     }
-    return <div className='Close'>{organise}</div>
+    return <div className='Checkin'>{organise}</div>
   }
 }

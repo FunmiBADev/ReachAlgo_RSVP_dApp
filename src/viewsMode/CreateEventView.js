@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap'
 import LoadingButton from '../components/Common/LoadingButton'
 import * as backend from '../build/index.startup.mjs'
 import {
@@ -7,13 +7,14 @@ import {
   defaultEventName,
   defaultEventDescription,
   defaultPrice,
-  defaultDeadline
+  defaultDeadline,
+  timer
 } from '../utitlity/utils'
 import SuccessConfirmation from '../components/Common/SuccessConfirmation'
-import { BodyTextB } from '../components/MyAlgoWallet/MyAlgoWallet.styles'
-
-const sleep = milliseconds =>
-  new Promise(resolve => setTimeout(resolve, milliseconds))
+import {
+  BodyText,
+  BodyTextB
+} from '../components/MyAlgoWallet/MyAlgoWallet.styles'
 
 export class CreateEventView extends React.Component {
   constructor (props) {
@@ -55,12 +56,13 @@ export class CreateEventView extends React.Component {
     const ctcInfoStr = this.state?.ctcInfoStr
     navigator.clipboard.writeText(ctcInfoStr)
     const origInnerHTML = button.innerHTML
-    button.innerHTML = 'Copied!'
+    button.innerHTML = 'Copied'
     button.disabled = true
-    await sleep(1000)
+    await timer(1000)
     button.innerHTML = origInnerHTML
     button.disabled = false
   }
+
   render () {
     let organise = null
     const parent = this
@@ -183,19 +185,23 @@ export class CreateEventView extends React.Component {
         <div>
           <Row>
             <Col>
-              <SuccessConfirmation
-                addMessage=' Event contract deployed, Please share contract information with
+              <Alert variant='info'>
+                <SuccessConfirmation
+                  addMessage=' Event contract deployed, Please share contract information with
         prospective guests:'
-              />
+                />
+              </Alert>
             </Col>
-
-            <Col>
-              <BodyTextB className='ContractInfo'>{ctcInfoStr}</BodyTextB>
-            </Col>
-            <Button onClick={e => this.copyToClipboard(e.currentTarget)}>
-              <BodyTextB>Copy to clipboard</BodyTextB>
-            </Button>
           </Row>
+          <div className='event-app'>
+            <Col>
+              <BodyText className='event-input'>{ctcInfoStr}</BodyText>
+
+              <Button onClick={e => this.copyToClipboard(e.currentTarget)}>
+                <BodyTextB>Copy to clipboard</BodyTextB>
+              </Button>
+            </Col>
+          </div>
         </div>
       )
     }

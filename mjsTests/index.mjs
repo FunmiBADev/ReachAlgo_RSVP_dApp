@@ -6,7 +6,7 @@ const stdlib = loadStdlib()
 const startingBalance = stdlib.parseCurrency(750)
 const EventCreatorAccount = await stdlib.newTestAccount(startingBalance)
 
-const eventEnd = 30
+const eventEnd = 80
 const eventName = 'Algo-Reach Hackathon'
 const eventDetails = 'More information about the event'
 
