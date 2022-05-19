@@ -9,12 +9,12 @@ export class CloseView extends React.Component {
     super(props)
     this.setState({ mode: 'EnterInfo', acc: {} })
   }
-  async doClose (ctcInfoStr) {
+  async eventClose (ctcInfoStr) {
     const ctcInfo = JSON.parse(ctcInfoStr)
     const contractCall = this.props.acc.contract(backend, ctcInfo)
     this.setState({ mode: 'Wait', ctc: contractCall })
     await contractCall.apis.Attendance.eventExpire()
-    this.setState({ mode: 'Done' })
+    this.setState({ mode: 'EndEvent' })
   }
   render () {
     let organise = null
@@ -25,7 +25,7 @@ export class CloseView extends React.Component {
       organise = (
         <div>
           <Form
-            onSubmit={() => parent.doClose(ctcInfoStr)}
+            onSubmit={() => parent.eventClose(ctcInfoStr)}
             className='event-app'
           >
             <Row>
@@ -67,8 +67,8 @@ export class CloseView extends React.Component {
           <LoadingButton addMessage='Please wait while your event contract is terminated' />
         </div>
       )
-    } else {
-      // 'Done'
+    } else if (mode == 'EndEvent') {
+      // 'EndEvent'
       organise = (
         <div>
           <Alert variant='success'>

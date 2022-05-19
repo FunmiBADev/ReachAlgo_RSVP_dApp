@@ -34,7 +34,7 @@ const MyAlgoWallet = ({ setAccount, setBal }) => {
       let rawBalance = await stdlib.balanceOf(acc)
       balance.current = stdlib.formatCurrency(rawBalance, 4)
       setAccountBal(balance.current)
-      console.log('Balance :' + balance.current)
+      console.log('Balance :' + balance.current + 'ALGOS')
     } catch (err) {
       console.log(err)
     }
