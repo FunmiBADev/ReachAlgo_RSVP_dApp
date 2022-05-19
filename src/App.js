@@ -6,7 +6,6 @@ import CloseEvent from './pages/close'
 import Guest from './pages/guest'
 import Create from './pages/create'
 import Checkin from './pages/checkin'
-import WalletConnect from './pages/wallet'
 
 const App = () => {
   return (
@@ -14,8 +13,7 @@ const App = () => {
       <Router>
         <AppNavBar />
         <Routes>
-          <Route path='/' exact element={<WalletConnect />} />
-          <Route path='/create' element={<Create />} />
+          <Route path='/' exact element={<Create />} />
           <Route path='/checkin' element={<Checkin />} />
           <Route path='/guest' element={<Guest />} />
           <Route path='/close' element={<CloseEvent />} />

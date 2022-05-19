@@ -60,7 +60,7 @@ const rsvp = async whoI => {
 //handle checkin
 const checkin = async whoI => {
   const who = guests[whoI]
-  console.log(`Check in of ${who[0]}`, stdlib.formatAddress(who))
+  console.log(`Check in of ${who}`, stdlib.formatAddress(who))
   await eventContractCall.apis.Attendance.guestAttended(who)
 }
 

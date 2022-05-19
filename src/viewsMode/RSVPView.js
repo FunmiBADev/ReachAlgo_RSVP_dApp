@@ -12,7 +12,10 @@ import { stdlib, timer } from '../utitlity/utils'
 export class RSVPView extends React.Component {
   constructor (props) {
     super(props)
-    this.setState({ mode: 'EnterInfo', acc: {} })
+    this.setState({
+      mode: 'EnterInfo',
+      acc: {}
+    })
   }
   async eventRSVP (ctcInfoStr) {
     const ctcInfo = JSON.parse(ctcInfoStr)
@@ -94,7 +97,9 @@ export class RSVPView extends React.Component {
           <Row>
             <Col>
               <Alert variant='info'>
-                <SuccessConfirmation addMessage=' Your RSVP was succefully confirmed, Your Address is:' />
+                <SuccessConfirmation addMessage='Your RSVP was succefully confirmed ' />
+
+                <BodyTextB>Your RSVP Address is:</BodyTextB>
               </Alert>
             </Col>
           </Row>

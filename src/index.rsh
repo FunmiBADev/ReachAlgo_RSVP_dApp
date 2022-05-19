@@ -9,10 +9,6 @@ export const startup = Reach.App(() => {
     ready: Fun([], Null)
   })
 
-  const AcceptTerms = Participant('Terms', {
-    acceptFee: Fun([UInt], Null)
-  })
-
   const Guest = API('Guest', {
     willAttend: Fun([], Bool)
   })
@@ -32,10 +28,6 @@ export const startup = Reach.App(() => {
 
   Event.publish(eventName, eventDetails, ticketPrice, eventEnd)
   Event.interact.ready()
-
-  AcceptTerms.only(() => {
-    interact.acceptFee(ticketPrice)
-  })
 
   const RSVPs = new Map(
     Object({
@@ -98,5 +90,6 @@ export const startup = Reach.App(() => {
   const leftovers = ticketsBooked // whats left after removing checked in guests
   transfer(leftovers * ticketPrice).to(Event)
   commit()
+
   exit()
 })
