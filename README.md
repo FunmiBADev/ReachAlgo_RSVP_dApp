@@ -1,4 +1,4 @@
-# NavBarReachAlgo
+# ReachAlgo_RSVP_dApp
 ## Stories
 1. For Guest that confirm checkin will get 100% refund of fees. For those that do not check in - they forfeit event fee.
 
