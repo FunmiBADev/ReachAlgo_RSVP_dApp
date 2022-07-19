@@ -276,87 +276,150 @@ The `index.rsh` file should look like this.
  'reach 0.1'
 
 export const startup = Reach.App(() => {
+
   const Event = Participant('Organiser', {
+  
     eventName: Bytes(128),
+    
     eventDetails: Bytes(250),
+    
     ticketPrice: UInt,
+    
     eventEnd: UInt,
+    
     ready: Fun([], Null)
   })
 
   const Guest = API('Guest', {
+  
     willAttend: Fun([], Bool)
+    
   })
 
   const ConfirmAttendance = API('Attendance', {
+  
     guestAttended: Fun([Address], Bool),
+    
     eventExpire: Fun([], Bool)
+    
   })
+  
   init()
 
   Event.only(() => {
+  
     const eventName = declassify(interact.eventName)
+    
     const eventDetails = declassify(interact.eventDetails)
+    
     const ticketPrice = declassify(interact.ticketPrice)
+    
     const eventEnd = declassify(interact.eventEnd)
+    
   })
 
   Event.publish(eventName, eventDetails, ticketPrice, eventEnd)
+  
   Event.interact.ready()
 
   const RSVPs = new Map(
+  
     Object({
+    
       attended: Bool
+      
     })
   )
 
   const [isContinue, ticketsBooked] = parallelReduce([true, 0])
+  
     .define(() => {})
+    
     .invariant(
+    
       true &&
+      
         balance() == ticketsBooked * ticketPrice &&
+        
         RSVPs.size() == ticketsBooked
+        
     )
     .while(isContinue)
+    
     .api(
+    
       Guest.willAttend, 
+      
       () => {
+      
         check(isNone(RSVPs[this]), 'No RSVP match found')
+        
       },
+      
       () => ticketPrice, 
+      
       c => {
+      
         check(isNone(RSVPs[this]), 'No RSVP match found')
+        
         RSVPs[this] = { attended: false }
+        
         c(true) 
+        
         return [isContinue, ticketsBooked + 1] 
+        
       }
     )
+    
     .api(
+    
       ConfirmAttendance.guestAttended, checkin
+      
       who => {
+      
         check(isSome(RSVPs[who]), 'Guest already Checked in')
+        
         check(this == Event, 'Event Organiser here')
+        
       },
+      
       _ => 0, 
+      
       (who, c) => {
+      
         check(isSome(RSVPs[who]), 'Guest already Checked in')
+        
         check(this == Event, 'Event Organiser here')
+        
         transfer(ticketPrice).to(who)
+        
         delete RSVPs[who]
+        
         c(true)
+        
         return [isContinue, ticketsBooked - 1] 
+        
       }
     )
+    
     .timeout(absoluteTime(eventEnd), () => {
+    
       const [[], c] = call(ConfirmAttendance.eventExpire)
+      
       c(true) 
+      
       return [false, ticketsBooked]
+      
     })
 
   const leftovers = ticketsBooked // 
+  
   transfer(leftovers * ticketPrice).to(Event)
+  
   commit()
+  
   exit()
+  
 })
 
  ```
