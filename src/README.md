@@ -61,8 +61,8 @@ That is the basis of our app and let's start building.
 
 ```js
  12  const  Guest = API('Guest', {
- 13  // confirmPurchase: Fun([UInt], Bool),
- 14  willAttend:  Fun([], Bool)
+ 13
+ 14      willAttend:  Fun([], Bool)
  15   })
  16
  17   const  ConfirmAttendance = API('Attendance', {
